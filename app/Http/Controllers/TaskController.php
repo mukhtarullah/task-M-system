@@ -24,7 +24,7 @@ class TaskController extends Controller
         $response = Http::get('https://jsonplaceholder.typicode.com/todos/1');
         $jsonData = $response->json();
         // dd($jsonData);
-        
+
         $task = new Task();
         $task->title = $request->title;
         $task->description = $request->description;
