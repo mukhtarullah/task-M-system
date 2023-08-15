@@ -25,7 +25,7 @@
     <body class="">
     <div class="container mt-3">
   <h1 class="mt-5">Task Management System</h1>
-   <div class="btn btn-info mt-3"><a href="{{ route('task.create') }}">Create Task</a></div>          
+   <div class="btn btn-info mt-3"><a href="{{ route('tasks.create') }}">Create Task</a></div>          
   <table class="mt-5 table table-bordered">
     <thead>
       <tr>
@@ -43,13 +43,13 @@
         <td>{{ $task->status }}</td>
         <td>
          <div class="d-flex">
-          <form action="{{ route('task.delete', $task->id) }}" method="post">
-            @csrf 
+          <form action="{{ route('tasks.destroy', $task->id) }}" method="POST">
+            @csrf @method('DELETE')
           <button class="" type="submit" data-id="{{ $task->id }}"><img class="imgFilter px-2" src="{{ asset('images/trash.svg')}}" alt=""></button>
           </form>
-          <form action="{{ route('task.edit', $task->id) }}" method="get">
-          <button class="" type="submit" data-id="{{ $task->id }}"><img class="imgFilter px-2" src="{{ asset('images/pen.svg')}}" alt=""></button>
-          </form>
+          <a href="{{ route('tasks.edit', $task->id) }}">
+            <img class="imgFilter px-2" src="{{ asset('images/pen.svg')}}" alt="">
+          </a>
           </div>
         
           

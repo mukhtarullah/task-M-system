@@ -16,8 +16,9 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6">
-            <form action="{{ route('task.update', $task->id) }}" method="POST" enctype="multipart/form-data" class="mt-3">
+            <form action="{{ route('tasks.update', $task->id) }}" method="POST" enctype="multipart/form-data" class="mt-3">
                 @csrf
+                @method('PUT')
                 <div class="form-group">
                     <label for="title">Title</label>
                     <input type="text" class="form-control" id="title" name="title" value="{{ $task->title }}">

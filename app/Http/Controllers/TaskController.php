@@ -6,52 +6,48 @@ use App\Http\Requests\TaskRequest;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
-
+use App\Services\TaskService;
 class TaskController extends Controller
 {
-   public function index(){
-    $tasks = Task::all();
-    return view('dashboard', compact('tasks'));
-   }
-   
 
-    public function create(){
-        return view('create');
+    const BASE_PATH = 'tasks.';
+    protected $taskService;
+
+    public function __construct(TaskService $taskService)
+    {
+        $this->taskService = $taskService;
     }
 
-    public function store(TaskRequest $request){
-
-        $response = Http::get('https://jsonplaceholder.typicode.com/todos/1');
-        $jsonData = $response->json();
-        // dd($jsonData);
-
-        $task = new Task();
-        $task->title = $request->title;
-        $task->description = $request->description;
-        $task->api_id =  $jsonData['id'];
-        $task->save();
-
-        return redirect()->route('task.list');
+    public function index()
+    {
+        return view(self::BASE_PATH.'dashboard', ['tasks' => $this->taskService->getAll()]);
     }
 
-    public function edit($id){
-        $task = Task::find($id);
-        return view('edit', compact('task'));
+    public function create()
+    {
+        return view(self::BASE_PATH.'create');
     }
 
-    public function update(TaskRequest $request,$id ){
-        $task = Task::find($id);
-        $task->title = $request->title;
-        $task->description = $request->description;
-        $task->status = $request->status;
-        $task->save();
-        return redirect()->route('task.list');
+    public function store(TaskRequest $request)
+    {        
+        Task::create($request->all());
+        return redirect()->route('tasks.index');
     }
 
-    public function delete($id){
+    public function edit(Task $task)
+    {
+        return view(self::BASE_PATH.'edit', ['task' => $this->taskService->edit($task)]);
+    }
 
-        Task::find($id)->delete();
+    public function update(TaskRequest $request,Task $task)
+    {
+        $this->taskService->update($request->all(), $task);
+        return redirect()->route('tasks.index');
+    }
 
-        return redirect()->route('task.list');
+    public function destroy(Task $task)
+    {
+        $this->taskService->delete($task);
+        return redirect()->route('tasks.index');
     }
 }
