@@ -17,3 +17,6 @@ cp .env.example .env
 
 php artisan migrate
 
+5)  For synchronization, run the following command"
+
+php atisan schedule:work
